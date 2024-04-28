@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">App5_Affirmation</string>
+    <string name="affirmation1">I believe in myself</string>
+    <string name="affirmation2">I forgive and release the past and look forward to the future</string>
+    <string name="affirmation3">I am not in danger; I am just uncomfortable; this too will pass</string>
+    <string name="affirmation4">I can do anything I set my mind to</string>
+    <string name="affirmation5">All I need to succeed is within me</string>
+    <string name="affirmation6">I am growing and learning every day</string>
+    <string name="affirmation7">It’s okay to leave my comfort zone</string>
+    <string name="affirmation8">I deserve to feel good about myself</string>
+    <string name="affirmation9">Every challenge I overcome is a success</string>
+    <string name="affirmation10">I let go of limiting beliefs and choose to trust myself</string>
+</resources>
