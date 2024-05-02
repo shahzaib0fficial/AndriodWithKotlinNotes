@@ -31,6 +31,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.app6_woof.ui.theme.AbrilFatface
 import com.example.app6_woof.ui.theme.App6_WoofTheme
 import com.example.woof.data.Dog
 import com.example.woof.data.dogs
@@ -111,7 +112,8 @@ fun DogInformation(
     Column(modifier = modifier) {
         Text(
             text = stringResource(dogName),
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
+            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small)),
+            fontFamily = AbrilFatface
         )
         Text(
             text = stringResource(R.string.years_old, dogAge),
