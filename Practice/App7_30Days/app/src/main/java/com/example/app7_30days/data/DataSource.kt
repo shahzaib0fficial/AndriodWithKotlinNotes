@@ -19,7 +19,7 @@ class DataSource {
             CookingClass(R.string.day11,R.string.day11_dish_title,R.drawable.day11_dish_image,R.string.day11_description),
             CookingClass(R.string.day12,R.string.day12_dish_title,R.drawable.day12_dish_image,R.string.day12_description),
             CookingClass(R.string.day13,R.string.day13_dish_title,R.drawable.day13_dish_image,R.string.day13_description),
-            CookingClass(R.string.day14,R.string.day14_dish_title,R.drawable.day14_dish_image,R.string.day14_description),
+            CookingClass(R.string.day15,R.string.day14_dish_title,R.drawable.day14_dish_image,R.string.day14_description),
             CookingClass(R.string.day15,R.string.day15_dish_title,R.drawable.day15_dish_image,R.string.day15_description),
             CookingClass(R.string.day16,R.string.day16_dish_title,R.drawable.day16_dish_image,R.string.day16_description),
             CookingClass(R.string.day17,R.string.day17_dish_title,R.drawable.day17_dish_image,R.string.day17_description),

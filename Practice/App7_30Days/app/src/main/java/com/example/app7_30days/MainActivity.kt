@@ -1,11 +1,20 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.example.app7_30days
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +29,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -49,33 +62,53 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CookingCard(cook: CookingClass,modifier: Modifier = Modifier) {
+    var showDescription by remember {
+        mutableStateOf(false)
+    }
+    val color by animateColorAsState(
+        targetValue = if(showDescription) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.primaryContainer
+    )
     Card(
         modifier = modifier
             .padding(8.dp)
+            .clickable { showDescription = !showDescription }
     ) {
-        Column(
+        Box(
             modifier = modifier
-                .padding(12.dp)
+                .background(color = color)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
+                )
         ) {
-            Text(
-                text = stringResource(id = cook.day),
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = stringResource(id = cook.title),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Image(
-                painter = painterResource(id = cook.image),
-                contentDescription = "Here Recipe Name",
-                contentScale = ContentScale.Crop,
+            Column(
                 modifier = modifier
-                    .fillMaxWidth()
-            )
-            Text(
-                text = stringResource(id = cook.description),
-                style = MaterialTheme.typography.bodyLarge
-            )
+                    .padding(12.dp)
+            ) {
+                Text(
+                    text = stringResource(id = cook.day),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(id = cook.title),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Image(
+                    painter = painterResource(id = cook.image),
+                    contentDescription = "Here Recipe Name",
+                    contentScale = ContentScale.Crop,
+                    modifier = modifier
+                        .fillMaxWidth()
+                )
+                if (showDescription) {
+                    Text(
+                        text = stringResource(id = cook.description),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
         }
     }
 }
