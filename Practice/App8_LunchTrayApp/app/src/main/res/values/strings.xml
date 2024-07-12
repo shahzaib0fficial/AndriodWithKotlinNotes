@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">App8_LunchTrayApp</string>
+    <string name="order_detail">Order Detail:\nEntree: %1$s\nSide dish: %2$s\nAccompaniment: %3$s\nPrice: %4$s\nThankYou for using our service!</string>
+    <string name="order_detail_title">Order Detail Title</string>
+</resources>
