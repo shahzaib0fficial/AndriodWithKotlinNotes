@@ -77,8 +77,8 @@ class LunchViewModel: ViewModel() {
     }
     fun reSet(){
         _uiState.value = LunchUiState()
-        Log.d("Vlaue", _uiState.value.toString())
-        Log.d("Value", LunchUiState().toString())
+//        Log.d("Vlaue", _uiState.value.toString())
+//        Log.d("Value", LunchUiState().toString())
 //        _uiState = MutableStateFlow(LunchUiState())
 //        _uiState.update {
 //            currentState->
