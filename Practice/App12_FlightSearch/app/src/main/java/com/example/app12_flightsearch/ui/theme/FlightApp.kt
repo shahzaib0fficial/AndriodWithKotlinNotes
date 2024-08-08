@@ -1,5 +1,6 @@
 package com.example.app12_flightsearch.ui.theme
 
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +19,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -28,11 +32,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.app12_flightsearch.ui.AddFlight
+import com.example.app12_flightsearch.ui.FlightScreen
 import com.example.app12_flightsearch.ui.HomeScreen
 
 enum class Screens(val title:String){
     HomeScreen("Flight Search"),
-    AddFlight("Add Flight")
+    AddFlight("Add Flight"),
+    FlightScreen("Flights")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +71,7 @@ fun FlightTopBar(
         )
         },
         actions = {
-            if(currentScreen.title != Screens.AddFlight.title){
+            if(currentScreen.title == Screens.HomeScreen.title){
                 IconButton(
                     onClick = { addFlightClick() },
                     modifier = Modifier.padding(end = 10.dp)
@@ -92,7 +98,7 @@ fun FlightApp(navController: NavHostController = rememberNavController(),request
     Scaffold(
         topBar = { FlightTopBar(
             onBackClick = {
-                          navController.navigateUp()
+                navController.navigateUp()
             },
             addFlightClick = {
                 navController.navigate(Screens.AddFlight.name)
@@ -106,12 +112,24 @@ fun FlightApp(navController: NavHostController = rememberNavController(),request
 
 @Composable
 fun ScreenNavigator(innerPadding:PaddingValues,navController: NavHostController,requestPermissionLauncher: ActivityResultLauncher<String>){
+    var itemName by rememberSaveable {
+        mutableStateOf("")
+    }
     NavHost(navController = navController, startDestination = Screens.HomeScreen.name, modifier = Modifier.padding(innerPadding)){
         composable(route = Screens.HomeScreen.name){
-            HomeScreen(requestPermissionLauncher = requestPermissionLauncher)
+            HomeScreen(
+                requestPermissionLauncher = requestPermissionLauncher,
+                onItemClick = {
+                    itemName = it
+                    navController.navigate(Screens.FlightScreen.name)
+                }
+            )
         }
         composable(route = Screens.AddFlight.name){
             AddFlight()
+        }
+        composable(route = Screens.FlightScreen.name){
+            FlightScreen(fromAirportName = itemName)
         }
     }
 }

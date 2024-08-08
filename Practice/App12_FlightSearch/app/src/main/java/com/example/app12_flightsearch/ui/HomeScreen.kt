@@ -27,14 +27,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.app12_flightsearch.R
+import com.example.app12_flightsearch.ui.viewModels.HomeScreenViewModel
 
 @Composable
-fun HomeScreen(requestPermissionLauncher: ActivityResultLauncher<String>){
+fun HomeScreen(requestPermissionLauncher: ActivityResultLauncher<String>,onItemClick : (String)-> Unit){
     var searchValue by rememberSaveable {
         mutableStateOf("")
     }
@@ -72,53 +87,92 @@ fun HomeScreen(requestPermissionLauncher: ActivityResultLauncher<String>){
         }
     }
 
-    TextField(
-        value = searchValue,
-        onValueChange = {
-            searchValue = it
-        },
-        singleLine = true,
-//        maxLines = 1,
-        placeholder = {
-            Text(
-                text = "Search Flight Here...",
-                color = Color(0xFFFFFFFF)
-            )
-        },
-        leadingIcon = {
-            IconButton(onClick = { /* TODO */ }) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    tint = Color(0xFFFFFFFF),
-                    modifier = Modifier
-                        .size(24.dp)
+    Column {
+        TextField(
+            value = searchValue,
+            onValueChange = {
+                searchValue = it
+            },
+            singleLine = true,
+    //        maxLines = 1,
+            placeholder = {
+                Text(
+                    text = "Search Flight Here...",
+                    color = Color(0xFFFFFFFF)
                 )
-            }
-        },
-        trailingIcon = {
-            IconButton(onClick = { startListening() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.microphoneicon),
-                    contentDescription = null,
-                    tint = Color(0xFFFFFFFF),
-                    modifier = Modifier
-                        .size(24.dp)
+            },
+            leadingIcon = {
+                IconButton(onClick = { /* TODO */ }) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        tint = Color(0xFFFFFFFF),
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+            },
+            trailingIcon = {
+                IconButton(onClick = { startListening() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.microphoneicon),
+                        contentDescription = null,
+                        tint = Color(0xFFFFFFFF),
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+            },
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color(0xFF87CEEB),
+                focusedContainerColor = Color(0xFF87CEEB),
+                unfocusedTextColor = Color(0xFFFFFFFF),
+                focusedTextColor = Color(0xFFFFFFFF),
+                cursorColor = Color(0xFFFFFFFF),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(30.dp),
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        )
+        if(searchValue != ""){
+            SearchResults(searchValue = searchValue,onItemClick = onItemClick)
+        }
+    }
+}
+
+@Composable
+fun SearchResults(searchValue: String,onItemClick: (String)-> Unit){
+    val homeScreenViewModel: HomeScreenViewModel = viewModel()
+    val data  = homeScreenViewModel.getSearchFlight(searchValue).collectAsState()
+    LazyColumn(
+        modifier = Modifier.padding(top = 15.dp)
+    ) {
+        items(data.value){item ->
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 5.dp)
+                    .clickable { onItemClick(item.fromAirportName) }
+            ) {
+                Text(
+                    text = item.fromAirportName,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = item.fromAirportDescription,
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
             }
-        },
-        colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = Color(0xFF87CEEB),
-            focusedContainerColor = Color(0xFF87CEEB),
-            unfocusedTextColor = Color(0xFFFFFFFF),
-            focusedTextColor = Color(0xFFFFFFFF),
-            cursorColor = Color(0xFFFFFFFF),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        ),
-        shape = RoundedCornerShape(30.dp),
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()
-    )
+        }
+    }
 }
